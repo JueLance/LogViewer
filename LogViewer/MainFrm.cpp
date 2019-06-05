@@ -174,7 +174,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
     API_VERIFY(m_wndHorzSplitter.CreateStatic(this, 1, 2));
     
     API_VERIFY(m_wndHorzSplitter.CreateView(0, 0, RUNTIME_CLASS(CMachinePidTidTreeView), 
-        CSize(200, 300), pContext));
+        CSize(300, 300), pContext));
 
 //  	API_VERIFY(m_wndIdVertSplitter.CreateStatic(&m_wndHorzSplitter, 1, 1,
 //  		WS_CHILD | WS_VISIBLE | WS_BORDER,  // style, WS_BORDER is needed
@@ -198,7 +198,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
     //    RUNTIME_CLASS(CSplitterWnd),CSize(0, 0), pContext));
     
     API_VERIFY(m_wndVertSplitter.CreateView(0, 0,
-        RUNTIME_CLASS(CLogFilterView), CSize(0, rcWin.Height() - 380), pContext));
+        RUNTIME_CLASS(CLogFilterView), CSize(0, rcWin.Height() - 550), pContext));
 
     API_VERIFY(m_wndVertSplitter.CreateView(1, 0,
         RUNTIME_CLASS(CLogItemView), CSize(0, 0), pContext));

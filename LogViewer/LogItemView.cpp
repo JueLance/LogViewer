@@ -14,16 +14,16 @@ struct strColumnInfo
 
 static strColumnInfo	columnInfos[] = 
 {
-    {TEXT("SeqNum"), 50,},
-    {TEXT("Machine"), 50,},
+    {TEXT("SeqNum"), 70,},
+    {TEXT("Machine"), 80,},
     {TEXT("PID"), 50,},
-    {TEXT("TID"), 80,},
-    {TEXT("Time"), 100,},
+    {TEXT("TID"),120,},
+    {TEXT("Time"), 150,},
     {TEXT("Elapse"), 70,},
     {TEXT("Level"), 50,},
-    {TEXT("ModuleName"), 20,},
-    {TEXT("FunName"), 20,},
-    {TEXT("SourceFile"), 20,},
+    {TEXT("ModuleName"), 250,},
+    {TEXT("FunName"), 90,},
+    {TEXT("SourceFile"), 100,},
     {TEXT("TraceInfo"), 800,}
 };
 
