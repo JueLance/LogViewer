@@ -17,7 +17,7 @@ public:
     bool operator()(const LogItemPointer& pItem) const
     {
         BOOL bChecked = TRUE;
-        
+
         if (bChecked)
         {
             bChecked = m_LogManager.m_TraceLevelDisplay[pItem->level];
@@ -27,7 +27,7 @@ public:
         {
             bChecked = m_LogManager.IsItemMatchSeqNumber(pItem->seqNum);
         }
-        
+
         if (bChecked)
         {
             bChecked = m_LogManager.IsItemIdChecked(pItem);// .m_AllLogProcessIdsChecked[pItem->processId];
@@ -46,22 +46,22 @@ public:
                 //bChecked = FTL::CFStringUtil::IsMatchMask(pItem->pszTraceInfo, m_LogManager.m_strLogInfoFilterString, FALSE);
                 std::list<CAtlString> tokens;
                 FTL::Split(strFilter, TEXT(" "), false, tokens);
-                for(std::list<CAtlString>::iterator iter = tokens.begin(); iter != tokens.end(); ++iter){
+                for (std::list<CAtlString>::iterator iter = tokens.begin(); iter != tokens.end(); ++iter) {
                     BOOL bMatch = (StrStrI(pItem->pszTraceInfo, *iter) != NULL);
                     switch (m_LogManager.m_filterType)
                     {
-                    case ftAll:
-                        bFilterByString &= bMatch;
-                        break;
-                    case ftAny:
-                        bFilterByString |= bMatch;
-                        break;
-                    case ftNone:
-                        bFilterByString &= (!bMatch);
-                        break;
-                    default:
-                        FTLASSERT(FALSE);
-                        break;
+                        case ftAll:
+                            bFilterByString &= bMatch;
+                            break;
+                        case ftAny:
+                            bFilterByString |= bMatch;
+                            break;
+                        case ftNone:
+                            bFilterByString &= (!bMatch);
+                            break;
+                        default:
+                            FTLASSERT(FALSE);
+                            break;
                     }
                 }
                 //再根据 m_isIncludeText 的值判断是需要包含文字还是排除文字
@@ -90,19 +90,19 @@ public:
         {
             switch (m_pSortContents[type_SortCount - nTryCount].contentType)
             {
-            case type_Sequence:
-                result = pItem1->seqNum - pItem2->seqNum;
-                break;
-            case type_Machine:
-                result = pItem1->machine.compare(pItem2->machine);
-                break;
-            case type_ProcessId:
-                result = pItem1->processId.compare(pItem2->processId);
-                break;
-            case type_ThreadId:
-                result = pItem1->threadId.compare(pItem2->threadId);
-                break;
-            case type_Time:
+                case type_Sequence:
+                    result = pItem1->seqNum - pItem2->seqNum;
+                    break;
+                case type_Machine:
+                    result = pItem1->machine.compare(pItem2->machine);
+                    break;
+                case type_ProcessId:
+                    result = pItem1->processId.compare(pItem2->processId);
+                    break;
+                case type_ThreadId:
+                    result = pItem1->threadId.compare(pItem2->threadId);
+                    break;
+                case type_Time:
                 {
                     result = pItem1->time - pItem2->time;// stTime.dwHighDateTime - pItem2->stTime.dwHighDateTime;
                     //if(0 == nResult)
@@ -111,39 +111,39 @@ public:
                     //}
                 }
                 break;
-            case type_ElapseTime:
-                result = pItem1->elapseTime - pItem2->elapseTime;
-                break;
-            case type_ModuleName:
-                if(pItem1->pszModuleName && pItem2->pszModuleName){
-                    result = _tcscmp(pItem1->pszModuleName,pItem2->pszModuleName);
-                }
-                break;
-            case type_FunName:
-                if(pItem1->pszFunName && pItem2->pszFunName){
-                    result = _tcscmp(pItem1->pszFunName,pItem2->pszFunName);
-                }
-                break;
-            case type_TraceLevel:
-                result = pItem1->level - pItem2->level;
-                break;
-            case type_FileName:
-                if(pItem1->pszSrcFileName && pItem2->pszSrcFileName){
-                    result = _tcscmp(pItem1->pszSrcFileName,pItem2->pszSrcFileName);
-                    if (result == 0)
-                    {
-                        result = pItem1->srcFileline - pItem2->srcFileline;
+                case type_ElapseTime:
+                    result = pItem1->elapseTime - pItem2->elapseTime;
+                    break;
+                case type_ModuleName:
+                    if (pItem1->pszModuleName && pItem2->pszModuleName) {
+                        result = _tcscmp(pItem1->pszModuleName, pItem2->pszModuleName);
                     }
-                }
-                break;
-            case type_TraceInfo:
-                if(pItem1->pszTraceInfo && pItem2->pszTraceInfo){
-                    result = _tcscmp(pItem1->pszTraceInfo,pItem2->pszTraceInfo);
-                }
-                break;
-            default:
-                FTLASSERT(FALSE);
-                break;
+                    break;
+                case type_FunName:
+                    if (pItem1->pszFunName && pItem2->pszFunName) {
+                        result = _tcscmp(pItem1->pszFunName, pItem2->pszFunName);
+                    }
+                    break;
+                case type_TraceLevel:
+                    result = pItem1->level - pItem2->level;
+                    break;
+                case type_FileName:
+                    if (pItem1->pszSrcFileName && pItem2->pszSrcFileName) {
+                        result = _tcscmp(pItem1->pszSrcFileName, pItem2->pszSrcFileName);
+                        if (result == 0)
+                        {
+                            result = pItem1->srcFileline - pItem2->srcFileline;
+                        }
+                    }
+                    break;
+                case type_TraceInfo:
+                    if (pItem1->pszTraceInfo && pItem2->pszTraceInfo) {
+                        result = _tcscmp(pItem1->pszTraceInfo, pItem2->pszTraceInfo);
+                    }
+                    break;
+                default:
+                    FTLASSERT(FALSE);
+                    break;
             }
             nTryCount--;
         }
@@ -211,10 +211,10 @@ BOOL CLogManager::SaveLogItems(LPCTSTR pszFilePath, BOOL bAll /* = FALSE */)
     BOOL bRet = FALSE;
     srand(GetTickCount());
     CStdioFile file;
-    API_VERIFY(file.Open(pszFilePath,CFile::modeWrite | CFile::modeCreate | CFile::typeText));
+    API_VERIFY(file.Open(pszFilePath, CFile::modeWrite | CFile::modeCreate | CFile::typeText));
     if (bRet)
     {
-        do 
+        do
         {
             CString strFormat;
             CFAutoLock<CFLockObject>  locker(&m_CsLockObj);
@@ -224,18 +224,18 @@ BOOL CLogManager::SaveLogItems(LPCTSTR pszFilePath, BOOL bAll /* = FALSE */)
             for (int i = 0; i < 100000; i++)
             {
                 strFormat.Format(TEXT("%04d-%02d-%02d %02d:%02d:%02d:%d: (%d|%d) Sau.Utils: INFO: Some Real Infomation\n"),
-                    2011,rand()%12+1,
-                    rand()%28+1, 
-                    rand()%24,
-                    rand()%60,rand()%60,
-                    rand()%1000000,rand()%20+300000, rand()%30+1090525000);
+                    2011, rand() % 12 + 1,
+                    rand() % 28 + 1,
+                    rand() % 24,
+                    rand() % 60, rand() % 60,
+                    rand() % 1000000, rand() % 20 + 300000, rand() % 30 + 1090525000);
                 file.WriteString(strFormat);
             }
 #else
-            for (LogItemArrayIterator iter = pSaveLogItems->begin() ; iter != pSaveLogItems->end(); ++iter)
+            for (LogItemArrayIterator iter = pSaveLogItems->begin(); iter != pSaveLogItems->end(); ++iter)
             {
                 LogItemPointer pItem = *iter;
-                strFormat.Format(TEXT("%08d,%s\n"),pItem->seqNum,pItem->pszTraceInfo);
+                strFormat.Format(TEXT("%08d,%s\n"), pItem->seqNum, pItem->pszTraceInfo);
                 file.WriteString(strFormat);
             }
 #endif 
@@ -274,7 +274,8 @@ VOID CLogManager::GetSelectedCount(LONG& nSelectedProcess, LONG& nSelectedThread
     {
         nSelectedProcess = m_nSelectedProcessCount;
         nSelectedThread = m_nSelectedThreadCount;
-    } else {
+    }
+    else {
         nSelectedProcess = 0;
         nSelectedThread = 0;
         {
@@ -292,20 +293,20 @@ VOID CLogManager::GetSelectedCount(LONG& nSelectedProcess, LONG& nSelectedThread
                     const TidContainer& tidContainer = iterPid->second;
                     for (TidContainer::const_iterator iterTid = tidContainer.begin();
                         iterTid != tidContainer.end();
-                        ++iterTid){
-                            if(iterTid->second.bChecked){
-                                nSelectedThread++;
-                                if (FALSE == isProcessSelected)
-                                {
-                                    isProcessSelected = TRUE;
-                                    nSelectedProcess++;
-                                }
+                        ++iterTid) {
+                        if (iterTid->second.bChecked) {
+                            nSelectedThread++;
+                            if (FALSE == isProcessSelected)
+                            {
+                                isProcessSelected = TRUE;
+                                nSelectedProcess++;
                             }
+                        }
                     }
                 }
             }
         }
-        
+
         m_nSelectedProcessCount = nSelectedProcess;
         m_nSelectedThreadCount = nSelectedThread;
     }
@@ -321,13 +322,13 @@ LONG CLogManager::GetDisplayLogItemCount() const
     return lCount;
 }
 
-BOOL CLogManager::IsItemMatchSeqNumber(LONG seqNumber){
+BOOL CLogManager::IsItemMatchSeqNumber(LONG seqNumber) {
     LONG checkEndSeqNumber = m_nEndSeqNumber < 0 ? LONG_MAX : m_nEndSeqNumber;
-    
-    return FTL_INRANGE(m_nStartSeqNumber, seqNumber , checkEndSeqNumber);
+
+    return FTL_INRANGE(m_nStartSeqNumber, seqNumber, checkEndSeqNumber);
 }
 
-BOOL CLogManager::IsItemIdChecked(const LogItemPointer& pItem){
+BOOL CLogManager::IsItemIdChecked(const LogItemPointer& pItem) {
     ID_INFOS& idInfos = m_allMachinePidTidInfos[pItem->machine][pItem->processId][pItem->threadId];
     return idInfos.bChecked;
 }
@@ -344,7 +345,7 @@ BOOL CLogManager::SetTraceLevelDisplay(TraceLevel level, BOOL bDisplay)
     return TRUE;
 }
 
-BOOL CLogManager::SetFilterSeqNumber(LONG nStartSeqNumber, LONG nEndSeqNumber){
+BOOL CLogManager::SetFilterSeqNumber(LONG nStartSeqNumber, LONG nEndSeqNumber) {
     m_nStartSeqNumber = nStartSeqNumber;
     m_nEndSeqNumber = nEndSeqNumber;
     return TRUE;
@@ -369,15 +370,15 @@ BOOL CLogManager::SetLogInfoFilterString(LPCTSTR pszFilterString, FilterType fil
 BOOL CLogManager::DoFilterLogItems()
 {
     LogItemListType displayItems;
-    FTL::copy_if(m_AllLogItems.begin(),m_AllLogItems.end(),
-        std::back_inserter(displayItems),LogItemFilter(*this));
+    FTL::copy_if(m_AllLogItems.begin(), m_AllLogItems.end(),
+        std::back_inserter(displayItems), LogItemFilter(*this));
     {
         CFAutoLock<CFLockObject>  locker(&m_CsLockObj);
         m_activeItemIndex = -1;
         m_DisplayLogItems.clear();
         m_DisplayLogItems.reserve(displayItems.size());
         m_DisplayLogItems.assign(displayItems.begin(), displayItems.end());
-        SortDisplayItem(m_SortContents[0].contentType,m_SortContents[0].bSortAscending);
+        SortDisplayItem(m_SortContents[0].contentType, m_SortContents[0].bSortAscending);
     }
     _CalcThreadElpaseTime(m_DisplayLogItems);
     m_nSelectedProcessCount = -1;
@@ -393,16 +394,16 @@ const LogItemPointer CLogManager::GetDisplayLogItem(LONG index) const
     {
         pLogItem = m_DisplayLogItems.at(index);
     }
-     
+
     return pLogItem;
 }
 
-void CLogManager::setActiveItemIndex(LONG index){
+void CLogManager::setActiveItemIndex(LONG index) {
     m_activeItemIndex = index;
 }
 
-CString CLogManager::getActiveItemTraceInfo(){
-    if (m_activeItemIndex >= 0 && m_activeItemIndex < (LONG)m_DisplayLogItems.size()){
+CString CLogManager::getActiveItemTraceInfo() {
+    if (m_activeItemIndex >= 0 && m_activeItemIndex < (LONG)m_DisplayLogItems.size()) {
         return m_DisplayLogItems.at(m_activeItemIndex)->pszTraceInfo;
     }
     return TEXT("");
@@ -413,15 +414,15 @@ BOOL CLogManager::SortDisplayItem(LogItemContentType SortContentType, BOOL bSort
     CFAutoLock<CFLockObject>  locker(&m_CsLockObj);
     if (m_SortContents[0].contentType != SortContentType)
     {
-        for (int i = type_SortCount - 1; i> 0 ; i--)
+        for (int i = type_SortCount - 1; i > 0; i--)
         {
-            m_SortContents[i].contentType = m_SortContents[i-1].contentType;
-            m_SortContents[i].bSortAscending = m_SortContents[i-1].bSortAscending;
+            m_SortContents[i].contentType = m_SortContents[i - 1].contentType;
+            m_SortContents[i].bSortAscending = m_SortContents[i - 1].bSortAscending;
         }
         m_SortContents[0].contentType = SortContentType;
     }
     m_SortContents[0].bSortAscending = bSortAscending;
-    sort(m_DisplayLogItems.begin(),m_DisplayLogItems.end(),LogItemCompare(&m_SortContents[0]));
+    sort(m_DisplayLogItems.begin(), m_DisplayLogItems.end(), LogItemCompare(&m_SortContents[0]));
     return TRUE;
 }
 
@@ -452,23 +453,23 @@ BOOL CLogManager::SetLogFiles(const CStringArray &logFilePaths)
         INT_PTR logFileCount = logFilePaths.GetCount();
         for (INT_PTR index = 0; bRet && index < logFileCount; index++)
         {
-//             if (0 == strExt.CompareNoCase(TEXT(".ftl")))
-//             {
-//                 bRet = ReadFTLogFile(logFilePaths[index]);
-//             }
-//             else
-            {
-                bRet = ReadTraceLogFile(logFilePaths[index]);
-            }
+            //             if (0 == strExt.CompareNoCase(TEXT(".ftl")))
+            //             {
+            //                 bRet = ReadFTLogFile(logFilePaths[index]);
+            //             }
+            //             else
+            //{
+            bRet = ReadTraceLogFile(logFilePaths[index]);
+            //}
             theApp.AddToRecentFileList(logFilePaths[index]);
         }
     }
     if (bRet)
     {
         m_AllLogItems.reserve(m_allInitLogItems.size());
-        m_AllLogItems.assign(m_allInitLogItems.begin(),m_allInitLogItems.end());
+        m_AllLogItems.assign(m_allInitLogItems.begin(), m_allInitLogItems.end());
         m_DisplayLogItems.reserve(m_AllLogItems.size());
-        m_DisplayLogItems.assign(m_AllLogItems.begin(),m_AllLogItems.end());
+        m_DisplayLogItems.assign(m_AllLogItems.begin(), m_AllLogItems.end());
         //copy(m_AllLogItems.begin(),m_AllLogItems.end(),back_ins_itr(m_DisplayLogItems.begin()));
 
         m_logFilePaths.Copy(logFilePaths);
@@ -626,14 +627,14 @@ int CLogManager::_ConvertItemInfo(const std::string& srcInfo, LPCTSTR& pszDest, 
 {
     int srcLength = (int)srcInfo.length();
     pszDest = new WCHAR[srcLength + 1];
-    ZeroMemory((void*)pszDest, sizeof(WCHAR) * (srcLength +1));
+    ZeroMemory((void*)pszDest, sizeof(WCHAR) * (srcLength + 1));
     MultiByteToWideChar(codePage, 0, srcInfo.c_str(), -1, (LPWSTR)pszDest, srcLength);
     return srcLength;
 }
 
-LPCTSTR CLogManager::_CopyItemInfo(LPCTSTR pszSource){
+LPCTSTR CLogManager::_CopyItemInfo(LPCTSTR pszSource) {
     LPTSTR pszDest = NULL;
-    if (pszSource != NULL){
+    if (pszSource != NULL) {
         size_t srcLength = _tcslen(pszSource);
         pszDest = new WCHAR[srcLength + 1];
         _tcsncpy(pszDest, pszSource, srcLength);
@@ -658,7 +659,7 @@ LogItemPointer CLogManager::ParseRegularTraceLog(std::string& strOneLog, const s
             std::string strTime = std::string(regularResults[m_logConfig.m_nItemTime]);
             if (!m_logConfig.m_strTimeFormat.IsEmpty())
             {
-                SYSTEMTIME st = {0};
+                SYSTEMTIME st = { 0 };
                 GetLocalTime(&st);
                 int microSecond = 0;//, ignore, zooHour = 0, zooMinute = 0;
                 if (0 == m_logConfig.m_strTimeFormat.CompareNoCase(TEXT("yyyy-MM-dd HH:mm:ss.SSS"))
@@ -671,28 +672,28 @@ LogItemPointer CLogManager::ParseRegularTraceLog(std::string& strOneLog, const s
                         &st.wYear, &st.wMonth, &st.wDay, &st.wHour, &st.wMinute, &st.wSecond, &microSecond);
                     st.wMilliseconds = (WORD)microSecond;
                 }
-                else if(0 == m_logConfig.m_strTimeFormat.CompareNoCase(TEXT("yyyy-MM-dd HH:mm:ss"))){
+                else if (0 == m_logConfig.m_strTimeFormat.CompareNoCase(TEXT("yyyy-MM-dd HH:mm:ss"))) {
                     //2017-06-12 18:21:34
                     m_logConfig.m_dateTimeType = dttDateTime;
                     sscanf_s(strTime.c_str(), "%4d-%2d-%2d %2d:%2d:%2d",
                         &st.wYear, &st.wMonth, &st.wDay, &st.wHour, &st.wMinute, &st.wSecond);
                 }
-                else if(0 == m_logConfig.m_strTimeFormat.CompareNoCase(TEXT("HH:mm:ss"))){
+                else if (0 == m_logConfig.m_strTimeFormat.CompareNoCase(TEXT("HH:mm:ss"))) {
                     m_logConfig.m_dateTimeType = dttTime;
                     sscanf_s(strTime.c_str(), "%2d:%2d:%2d",
                         &st.wHour, &st.wMinute, &st.wSecond);
                 }
-                else if(0 == m_logConfig.m_strTimeFormat.CompareNoCase(TEXT("HH:mm:ss.SSS"))){
+                else if (0 == m_logConfig.m_strTimeFormat.CompareNoCase(TEXT("HH:mm:ss.SSS"))) {
                     m_logConfig.m_dateTimeType = dttTime;
                     sscanf_s(strTime.c_str(), "%2d:%2d:%2d%*c%3d",
                         &st.wHour, &st.wMinute, &st.wSecond, &microSecond);
                     st.wMilliseconds = (WORD)microSecond;
                 }
-                else{
+                else {
                     FTLASSERT(FALSE);
                 }
-                FILETIME localFileTime = {0};
-                SystemTimeToFileTime(&st,&localFileTime);
+                FILETIME localFileTime = { 0 };
+                SystemTimeToFileTime(&st, &localFileTime);
                 pItem->time = *((LONGLONG*)&localFileTime);// ((((st.wHour * 60) + st.wMinute) * 60) + st.wSecond)* 1000 + microSecond;
                 if (m_logConfig.m_dateTimeType == dttTime)
                 {
@@ -701,16 +702,16 @@ LogItemPointer CLogManager::ParseRegularTraceLog(std::string& strOneLog, const s
             }
         }
 
-        if (m_logConfig.m_nItemLevel != INVLIAD_ITEM_MAP){
+        if (m_logConfig.m_nItemLevel != INVLIAD_ITEM_MAP) {
             std::string strLevel = std::string(regularResults[m_logConfig.m_nItemLevel]);
             FTL::Trim(strLevel);
             pItem->level = m_logConfig.GetTraceLevelByText(strLevel);
         }
-        if (m_logConfig.m_nItemMachine != INVLIAD_ITEM_MAP){
+        if (m_logConfig.m_nItemMachine != INVLIAD_ITEM_MAP) {
             std::string strMachine = std::string(regularResults[m_logConfig.m_nItemMachine]);
             pItem->machine = FTL::Trim(strMachine);
         }
-        if (m_logConfig.m_nItemPId != INVLIAD_ITEM_MAP){
+        if (m_logConfig.m_nItemPId != INVLIAD_ITEM_MAP) {
             std::string strPid = std::string(regularResults[m_logConfig.m_nItemPId]);
             pItem->processId = FTL::Trim(strPid);
         }
@@ -758,7 +759,12 @@ BOOL CLogManager::ReadTraceLogFile(LPCTSTR pszFilePath)
 {
     BOOL bRet = FALSE;
     CFConversion conv;
-    std::ifstream inFile(conv.TCHAR_TO_UTF8(pszFilePath));
+
+    //LPSTR filePath = conv.TCHAR_TO_UTF8(pszFilePath);
+
+    std::wstring filePath(pszFilePath);
+
+    std::ifstream inFile(filePath);
     if (inFile.good())
     {
         std::string strOneLog;
@@ -768,10 +774,10 @@ BOOL CLogManager::ReadTraceLogFile(LPCTSTR pszFilePath)
 
         LogItemPointer preLogItem;
 
-        try{
+        try {
             const std::tr1::regex regularPattern(conv.TCHAR_TO_UTF8(m_logConfig.m_strLogRegular));
 
-            while(getline(inFile, strOneLog))
+            while (getline(inFile, strOneLog))
             {
                 if (readCount == 1 && strOneLog.length() > 3)
                 {
@@ -789,7 +795,7 @@ BOOL CLogManager::ReadTraceLogFile(LPCTSTR pszFilePath)
                 {
                     //去除最后的 "\r 或 \n", 避免正则表达式解析失败.
                     bool needRemove = false;
-                    do 
+                    do
                     {
                         unsigned char cLast = strOneLog.at(strOneLog.length() - 1);
                         needRemove = cLast == '\r' || cLast == '\n';
@@ -808,10 +814,11 @@ BOOL CLogManager::ReadTraceLogFile(LPCTSTR pszFilePath)
                 }
                 readCount++; //放到这个地方来，保证即使一行日志读取失败，SeqNum还是和文件的行数对应
             }
-        }catch(const std::tr1::regex_error& /*e*/){
+        }
+        catch (const std::tr1::regex_error& /*e*/) {
             bRet = FALSE;
             FTL::CFConversion conv;
-            FTL::FormatMessageBox(NULL, TEXT("Regex Error"), MB_OK, TEXT("Wrong Regex: \"%s\"\nPlease confirm the REGULAR is valid in %s"), 
+            FTL::FormatMessageBox(NULL, TEXT("Regex Error"), MB_OK, TEXT("Wrong Regex: \"%s\"\nPlease confirm the REGULAR is valid in %s"),
                 m_logConfig.m_strLogRegular, m_logConfig.m_config.GetFilePathName());
         }
 
@@ -820,14 +827,15 @@ BOOL CLogManager::ReadTraceLogFile(LPCTSTR pszFilePath)
     return bRet;
 }
 
-void CLogManager::_AppendLogItem(LogItemPointer& pLogItem){
+void CLogManager::_AppendLogItem(LogItemPointer& pLogItem) {
     //MachinePIdTIdType idType(pLogItem->machine, pLogItem->processId, pLogItem->threadId);
     ID_INFOS &idInfos = m_allMachinePidTidInfos[pLogItem->machine][pLogItem->processId][pLogItem->threadId];
-    if (!idInfos.bInited){ //第一次
+    if (!idInfos.bInited) { //第一次
         pLogItem->elapseTime = 0;
         idInfos.lastTimeStamp = pLogItem->time;
         idInfos.bInited = TRUE;
-    } else {
+    }
+    else {
         pLogItem->elapseTime = pLogItem->time - idInfos.lastTimeStamp;
         idInfos.lastTimeStamp = pLogItem->time;
     }
@@ -841,14 +849,14 @@ BOOL CLogManager::_CalcThreadElpaseTime(LogItemArrayType& logItems)
     ThreadExecuteTimeContainer threadExecuteTimes;
 
     for (LogItemArrayIterator iterItem = logItems.begin();
-        iterItem != logItems.end(); 
+        iterItem != logItems.end();
         ++iterItem)
     {
         LogItemPointer& pLogItem = *iterItem;
 
         MachinePIdTIdType idType(pLogItem->machine, pLogItem->processId, pLogItem->threadId);
         ThreadExecuteTimeContainer::iterator iterElapse = threadExecuteTimes.find(idType);
-        if (threadExecuteTimes.end() == iterElapse )
+        if (threadExecuteTimes.end() == iterElapse)
         {
             iterElapse = threadExecuteTimes.insert(ThreadExecuteTimeContainer::value_type(idType, pLogItem->time)).first;
             pLogItem->elapseTime = 0;
